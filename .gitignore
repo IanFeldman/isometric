@@ -1,5 +1,7 @@
 sdl2/*
 *.dll
 *.exe
+build
 Makefile
 LICENSE
+.DS_Store

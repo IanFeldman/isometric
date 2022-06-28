@@ -6,14 +6,14 @@
 World::World(Game* game)
     :mGame(game)
 {
-    mTileset = mGame->GetTexture("assets/tileset.png");
+    mTileset = mGame->GetTexture("assets/depth-tileset.png");
     mNoise.SetNoiseType(FastNoiseLite::NoiseType_Perlin);
 }
 
 void World::Generate(int playerX, int playerY) {
     // amount of tiles to generate in each direction around player
-    int tileCount = 3;
-    int tileSize = 256;
+    int tileCount = 128;
+    int tileSize = 4; // how big to draw the tiles
 
     // find the grid positions of player
     int playerGridX = (int)(playerX / tileSize) * tileSize;
@@ -31,19 +31,14 @@ void World::Generate(int playerX, int playerY) {
             int sampleY = playerGridY + j * tileSize;
             float height = mNoise.GetNoise((float)sampleX, (float)sampleY);
 
-            SDL_Rect sourceRect;
-            if (height < -0.5f) {
-               sourceRect = {48, 0, 16, 16}; 
-            }
-            else if (height < 0.0f) {
-               sourceRect = {32, 0, 16, 16}; 
-            }
-            else if (height < 0.5f) {
-               sourceRect = {16, 0, 16, 16}; 
-            }
-            else{
-               sourceRect = {0, 0, 16, 16}; 
-            }
+            // -1 to 1 -> 0 to 16
+            height = (int)((height + 1) * 8.0f);
+            if (height == 16) { height--; }
+
+            int tilesetRow = (int)(height / 4);
+            int tilesetColumn = (int)height % 4;
+            // the 16s here come from the tileset sprite itself. Immutable!
+            SDL_Rect sourceRect = { tilesetColumn * 16, tilesetRow * 16, 16, 16 };
 
             SDL_Rect destRect = { (i + tileCount) * tileSize, (j + tileCount) * tileSize, tileSize, tileSize }; 
             SDL_RenderCopy(mGame->GetRenderer()->GetSDLRenderer(), mTileset, &sourceRect, &destRect);
@@ -56,5 +51,6 @@ void World::Generate(int playerX, int playerY) {
     int width = tileSize * 2 * tileCount;
     int height = tileSize * 2 * tileCount;
     mGame->GetRenderer()->DrawWorld(backgroundTex, texX, texY, width, height);
+    SDL_DestroyTexture(backgroundTex);
 }
 
