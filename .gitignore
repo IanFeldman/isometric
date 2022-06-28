@@ -1,0 +1,5 @@
+sdl2/*
+*.dll
+*.exe
+Makefile
+LICENSE
