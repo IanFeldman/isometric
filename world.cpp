@@ -6,10 +6,10 @@
 World::World(Game* game)
     :mGame(game)
     ,mNoiseFreq(0.001f)
-    ,mTileCount(16)         // number of tiles to generate in each direction
+    ,mTileCount(10)         // number of tiles to generate in each direction
     ,mTileSize(64)          // how large to render tiles
     ,mSpriteTileSize(16)    // size of each tile on spritesheet
-    ,mWaterLine(0.5f)
+    ,mWaterLine(1.0f)
 {
     mTileset = mGame->GetTexture("assets/tileset.png");
     mNoise.SetNoiseType(FastNoiseLite::NoiseType_Perlin);

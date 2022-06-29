@@ -88,7 +88,7 @@ void Game::GenerateOutput() {
     mRenderer->ClearScreen();
 
     // generates and renders terrain
-    mWorld->Generate(mPlayer->GetPosition().x, mPlayer->GetPosition().y);
+    mWorld->Generate((int)mCamera.x, (int)mCamera.y);
 
     // loop over sprites and draw them
     for (SpriteComponent* sprite : mSprites) {
@@ -97,6 +97,7 @@ void Game::GenerateOutput() {
         }
     }
 
+    /*
     // CC DEBUG
     for (Actor* a : mActors) {
         CollisionComponent* cc = a->GetComponent<CollisionComponent>();
@@ -104,6 +105,7 @@ void Game::GenerateOutput() {
             cc->Debug();
         }
     }
+    */
 
     // render present
     mRenderer->Present();

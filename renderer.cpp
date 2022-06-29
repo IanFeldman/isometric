@@ -8,7 +8,7 @@
 // constructor
 Renderer::Renderer(Game* game)
     :mGame(game)
-    ,mWindowSize((SDL_Point){800, 500})
+    ,mWindowSize((SDL_Point){1000, 750})
 {
 }
 
