@@ -30,7 +30,7 @@ bool Game::Initialize() {
 void Game::LoadData() {
     mPlayer = new Player(this);
     mPlayer->SetPosition(Vector2(400, 0));
-    mPlayer->SetScale(1.0f);
+    mPlayer->SetScale(4.0f);
 
     mWorld = new World(this);
 }

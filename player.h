@@ -20,7 +20,7 @@ public:
 
 private:
     class SpriteComponent* mSpriteComponent;
-    // class AnimatedSprite* mASprite;
+    class AnimatedSprite* mASprite;
     class CollisionComponent* mCC;
     MoveState mMoveState;
     Vector2 mVelocity;

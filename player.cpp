@@ -1,8 +1,9 @@
 #include "animatedsprite.h"
 #include "collisioncomponent.h"
 #include "game.h"
-#include "player.h"
 #include "math.h"
+#include "player.h"
+#include <string>
 
 Player::Player(Game* game)
 	:Actor(game)
@@ -11,46 +12,19 @@ Player::Player(Game* game)
     // create collision component
     mCC = new CollisionComponent(this, 32, 32);
 
-    mSpriteComponent = new SpriteComponent(this, 100);
-    mSpriteComponent->SetTexture(mGame->GetTexture("assets/blank.png"));
-    /*
-    mASprite = new AnimatedSprite(this, 100);
-    mASprite->SetFPS(10.0f);
-    // idle
-	std::vector<SDL_Texture*> idleAnim{
-		mGame->GetTexture("assets/player/idle/idle1.png"),
-		mGame->GetTexture("assets/player/idle/idle1.png"),
-		mGame->GetTexture("assets/player/idle/idle2.png"),
-		mGame->GetTexture("assets/player/idle/idle2.png"),
-		mGame->GetTexture("assets/player/idle/idle3.png"),
-		mGame->GetTexture("assets/player/idle/idle3.png"),
-		mGame->GetTexture("assets/player/idle/idle4.png"),
-		mGame->GetTexture("assets/player/idle/idle4.png")};
-    mASprite->AddAnimation("idle", idleAnim);
-    // run right
-	std::vector<SDL_Texture*> runRAnim{
-		mGame->GetTexture("assets/player/run-r/run-r1.png"),
-		mGame->GetTexture("assets/player/run-r/run-r2.png"),
-		mGame->GetTexture("assets/player/run-r/run-r3.png"),
-		mGame->GetTexture("assets/player/run-r/run-r4.png"),
-		mGame->GetTexture("assets/player/run-r/run-r5.png"),
-		mGame->GetTexture("assets/player/run-r/run-r6.png")};
-    mASprite->AddAnimation("run-right", runRAnim);
-    // run left 
-	std::vector<SDL_Texture*> runLAnim{
-		mGame->GetTexture("assets/player/run-l/run-l1.png"),
-		mGame->GetTexture("assets/player/run-l/run-l2.png"),
-		mGame->GetTexture("assets/player/run-l/run-l3.png"),
-		mGame->GetTexture("assets/player/run-l/run-l4.png"),
-		mGame->GetTexture("assets/player/run-l/run-l5.png"),
-		mGame->GetTexture("assets/player/run-l/run-l6.png")};
-    mASprite->AddAnimation("run-left", runLAnim);
+    mASprite = new AnimatedSprite(this, mGame->GetTexture("assets/test-anim.png"), 100);
+    mASprite->SetFPS(2.0f);
+    // base
+    std::string name = "base";
+    SDL_Rect frame1 = { 0, 0, 16, 16 };
+    SDL_Rect frame2 = { 16, 0, 16, 16 };
+	std::vector<SDL_Rect*> baseAnim = { &frame1, &frame2 };
+    mASprite->AddAnimation(&name, &baseAnim);
     // set anim
-    mASprite->SetAnimation("idle");
+    mASprite->SetAnimation(&name);
 	mASprite->SetIsPaused(false);
-    */
     // set move state
-    mMoveState = MoveState::Idle;
+    // mMoveState = MoveState::Idle;
 }
 
 void Player::OnUpdate(float deltaTime)

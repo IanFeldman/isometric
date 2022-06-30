@@ -7,22 +7,24 @@
 class AnimatedSprite : public SpriteComponent
 {
 public:
-    AnimatedSprite(class Actor*, int drawOrder = 100);
+    AnimatedSprite(class Actor*, SDL_Texture* spritesheet, int drawOrder = 100);
 
     // overriding component update
     void Update(float deltaTime) override;
 
-    void AddAnimation(const std::string& name, const std::vector<SDL_Texture*>& images);
+    void AddAnimation(const std::string* name, const std::vector<SDL_Rect*>* frames);
 
-    void SetAnimation(const std::string& name, bool resetTimer = false);
+    void SetAnimation(const std::string* name, bool resetTimer = false);
 
-    const std::string& GetAnimation() { return mAnimName; }
+    const std::string* GetAnimation() { return &mAnimName; }
 
     void SetIsPaused(bool pause) { mIsPaused = pause; }
 
     void SetFPS(float fps) { mAnimFPS = fps; }
 
 protected:
+    // spritesheet with animation frames on it
+    SDL_Texture* mSpritesheet;
 	// Map of animation name to vector of textures corresponding to the animation
 	std::unordered_map<std::string, std::vector<SDL_Texture*>> mAnims;
 	

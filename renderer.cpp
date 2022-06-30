@@ -9,8 +9,7 @@
 Renderer::Renderer(Game* game)
     :mGame(game)
     ,mWindowSize((SDL_Point){1000, 750})
-{
-}
+{ }
 
 Renderer::~Renderer() {
     //Destroy window
@@ -41,6 +40,7 @@ bool Renderer::Create() {
         return false;
     }
 
+    SDL_SetRenderDrawBlendMode(mSDLRenderer, SDL_BLENDMODE_BLEND);
     return true;
 }
 
@@ -76,6 +76,7 @@ void Renderer::DrawSprite(SpriteComponent* sprite) {
     r.x = static_cast<int>(ownerPosX - r.w / 2);
     r.y = static_cast<int>(ownerPosY - r.h / 2);
 
+    SDL_SetTextureBlendMode(sprite->GetTexture(), SDL_BLENDMODE_BLEND);
     SDL_RenderCopy(mSDLRenderer, sprite->GetTexture(), nullptr, &r);
 }
 
