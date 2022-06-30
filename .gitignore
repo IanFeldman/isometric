@@ -1,6 +1,4 @@
-sdl2/*
-*.dll
-*.exe
+sdl2
 build
 Makefile
 LICENSE
