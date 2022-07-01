@@ -49,11 +49,10 @@ void AnimatedSprite::AddAnimation(const std::string* name, const std::vector<SDL
         SDL_SetRenderTarget(rend, frame);
         SDL_RenderCopy(rend, mSpritesheet, sourceRect, nullptr);
         animation.push_back(frame);
+
+        mOwner->GetGame()->CacheTexture("tileset-texture", frame);
     }
 	mAnims.emplace(*name, animation);
-
     SDL_SetRenderTarget(rend, nullptr);
-    // TODO:
-    // DESTROY TEXTURES
 }
 

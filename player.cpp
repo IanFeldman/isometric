@@ -12,19 +12,23 @@ Player::Player(Game* game)
     // create collision component
     mCC = new CollisionComponent(this, 32, 32);
 
-    mASprite = new AnimatedSprite(this, mGame->GetTexture("assets/test-anim.png"), 100);
-    mASprite->SetFPS(2.0f);
-    // base
-    std::string name = "base";
-    SDL_Rect frame1 = { 0, 0, 16, 16 };
-    SDL_Rect frame2 = { 16, 0, 16, 16 };
-	std::vector<SDL_Rect*> baseAnim = { &frame1, &frame2 };
-    mASprite->AddAnimation(&name, &baseAnim);
+    mASprite = new AnimatedSprite(this, mGame->GetTexture("assets/tileset.png"), 100);
+    mASprite->SetFPS(10.0f);
+    // ANIMATIONS
+    // idle
+    std::string name = "idle";
+    SDL_Rect frame1 = { 0, 4 * 16, 16, 16 };
+	std::vector<SDL_Rect*> idleAnim = { &frame1 };
+    mASprite->AddAnimation(&name, &idleAnim);
+    // walk
+    name = "walk";
+    frame1 = { 1 * 16, 4 * 16, 16, 16 };
+    SDL_Rect frame2 = { 2 * 16, 4 * 16, 16, 16 };
+	std::vector<SDL_Rect*> walkAnim = { &frame1, &frame2 };
+    mASprite->AddAnimation(&name, &walkAnim);
     // set anim
     mASprite->SetAnimation(&name);
 	mASprite->SetIsPaused(false);
-    // set move state
-    // mMoveState = MoveState::Idle;
 }
 
 void Player::OnUpdate(float deltaTime)
@@ -46,7 +50,6 @@ void Player::OnUpdate(float deltaTime)
     if (std::abs(camPos.x - mPosition.x) + std::abs(camPos.y - mPosition.y) < 1.0f) {
         camPos = mPosition;
     }
-    //mGame->SetCamera(mPosition);
     mGame->SetCamera(camPos);
 }
 
@@ -59,91 +62,24 @@ void Player::GetInput() {
     bool up = keyboardState[SDL_SCANCODE_W];
     bool down = keyboardState[SDL_SCANCODE_S];
 
+    std::string name = "idle";
     if (left) {
         vel.x -= mMoveSpeed;
+        name = "walk";
     }
     if (right) {
         vel.x += mMoveSpeed;
+        name = "walk";
     }
     if (up) {
         vel.y -= mMoveSpeed;
+        name = "walk";
     }
     if (down) {
         vel.y += mMoveSpeed;
+        name = "walk";
     }
+    mASprite->SetAnimation(&name);
     mVelocity = vel;
-
-    /*
-    switch(mMoveState) {
-        case MoveState::Idle:
-            // run right
-            if (right && !left) {
-                mVelocity.x = mMoveSpeed; 
-                //mASprite->SetAnimation("run-right");
-                mMoveState = MoveState::RunRight;
-            }
-            // run left
-            else if (!right && left) {
-                mVelocity.x = -mMoveSpeed;
-                //mASprite->SetAnimation("run-left");
-                mMoveState = MoveState::RunLeft;
-            }
-            // run up
-            if (up && !down) {
-                mVelocity.y = -mMoveSpeed;
-                mMoveState = MoveState::RunUp;
-            }
-            // run down
-            if (!up && down) {
-                mVelocity.y = mMoveSpeed;
-                mMoveState = MoveState::RunUp;
-            }
-            break;
-        case MoveState::RunRight:
-            // run left
-            if (!right && left) {
-                mVelocity.x = -mMoveSpeed;
-                //mASprite->SetAnimation("run-left");
-                mMoveState = MoveState::RunLeft;
-            }
-            // idle
-            else if (!left && !right && !up && !down) {
-                mVelocity = Vector2(0.0f, 0.0f);
-                //mASprite->SetAnimation("idle");
-                mMoveState = MoveState::Idle;
-            }
-            break;
-        case MoveState::RunLeft:
-            // run right
-            if (right && !left) {
-                mVelocity.x = mMoveSpeed;
-                //mASprite->SetAnimation("run-right");
-                mMoveState = MoveState::RunRight;
-            }
-            // idle
-            else if ((!right && !left) || (left && right)) {
-                mVelocity = Vector2(0.0f, 0.0f);
-                //mASprite->SetAnimation("idle");
-                mMoveState = MoveState::Idle;
-            }
-            break;
-        case MoveState::RunUp:
-            // run down 
-            if (!up && down) {
-                mVelocity.y = mMoveSpeed;
-                //mASprite->SetAnimation("run-right");
-                mMoveState = MoveState::RunDown;
-            }
-            // idle
-            else if ((!right && !left) || (left && right)) {
-                mVelocity = Vector2(0.0f, 0.0f);
-                //mASprite->SetAnimation("idle");
-                mMoveState = MoveState::Idle;
-            }
-            break;
-        default:
-            break;
-    }
-    */
 }
 
