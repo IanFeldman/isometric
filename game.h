@@ -40,6 +40,8 @@ public:
     Vector2 GetCamera() { return mCamera; }
     void SetCamera(Vector2 pos) { mCamera = pos; }
 
+    class World* GetWorld() { return mWorld; }
+
 protected:
     bool mRunning;
     int mPrevTime;

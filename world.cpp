@@ -20,6 +20,13 @@ void World::Generate(int playerX, int playerY) {
     // find the grid positions of player
     int playerGridX = (int)(playerX / mTileSize) * mTileSize;
     int playerGridY = (int)(playerY / mTileSize) * mTileSize;
+    // when negative, round to more negative grid line
+    if (playerX < 0) {
+        playerGridX -= mTileSize;
+    }
+    if (playerY < 0) {
+        playerGridY -= mTileSize;
+    }
 
     // create big texture
     int width = mTileSize * 2 * mTileCount;
@@ -253,3 +260,22 @@ void World::DetWaterTex(float height, int sampleX, int sampleY, int* tilesetX, i
         *tilesetY = 2;
     }
 }
+
+bool World::IsWater(int x, int y) {
+    // get the grid positions of player
+    int gridX = (int)(x / mTileSize) * mTileSize;
+    int gridY = (int)(y / mTileSize) * mTileSize;
+    // when negative, round to more negative gridline
+    if (x < 0) {
+        gridX -= mTileSize;
+    }
+    if (y < 0) {
+        gridY -= mTileSize;
+    }
+
+    float height = mNoise.GetNoise((float)gridX, (float)gridY);
+    height++;
+
+    return height <= mWaterLine;
+}
+

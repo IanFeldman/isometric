@@ -88,7 +88,7 @@ void Game::GenerateOutput() {
     mRenderer->ClearScreen();
 
     // generates and renders terrain
-    mWorld->Generate((int)mCamera.x, (int)mCamera.y);
+    mWorld->Generate((int)mPlayer->GetPosition().x, (int)mPlayer->GetPosition().y);
 
     // loop over sprites and draw them
     for (SpriteComponent* sprite : mSprites) {
