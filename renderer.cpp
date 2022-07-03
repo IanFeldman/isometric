@@ -100,3 +100,14 @@ void Renderer::DrawRectangle(SDL_Rect rect) {
     SDL_RenderDrawRect(mSDLRenderer, &rect);
 }
 
+SDL_Texture* Renderer::CreateTextureFromTexture(SDL_Texture* sourceTex, int width, int height, SDL_Rect* sourceRect) {
+    SDL_Texture* tex = SDL_CreateTexture(mSDLRenderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, width, height);
+    SDL_SetRenderTarget(mSDLRenderer, tex);
+    SDL_RenderCopy(mSDLRenderer, sourceTex, sourceRect, nullptr);
+    SDL_SetRenderTarget(mSDLRenderer, nullptr);
+    mGame->CacheTexture("tileset-texture", tex);
+    return tex;
+}
+
+
+

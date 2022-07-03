@@ -11,7 +11,7 @@ Player::Player(Game* game)
     ,mMoveSpeed(300.0f)
 {
     // create collision component
-    mCC = new CollisionComponent(this, 32, 32);
+    mCC = new CollisionComponent(this, 12, 16);
 
     mASprite = new AnimatedSprite(this, mGame->GetTexture("assets/tileset.png"), 100);
     mASprite->SetFPS(10.0f);

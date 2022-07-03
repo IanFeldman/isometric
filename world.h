@@ -1,6 +1,8 @@
 #pragma once
 #include "fastnoiselite.h"
+#include "math.h"
 #include <SDL2/SDL.h>
+#include <vector>
 
 class World {
 
@@ -17,5 +19,7 @@ protected:
     int mTileCount, mTileSize, mSpriteTileSize;
     float mWaterLine;
     SDL_Texture* mTileset;
+
+    std::vector<Vector2> mTreePositions;
 };
 

@@ -97,7 +97,6 @@ void Game::GenerateOutput() {
         }
     }
 
-    /*
     // CC DEBUG
     for (Actor* a : mActors) {
         CollisionComponent* cc = a->GetComponent<CollisionComponent>();
@@ -105,7 +104,6 @@ void Game::GenerateOutput() {
             cc->Debug();
         }
     }
-    */
 
     // render present
     mRenderer->Present();

@@ -19,6 +19,8 @@ public:
     // CC DEBUG
     void DrawRectangle(SDL_Rect rect);
 
+    SDL_Texture* CreateTextureFromTexture(SDL_Texture* sourceTex, int width, int height, SDL_Rect* sourceRect);
+
     // getters/setters
     SDL_Renderer* GetSDLRenderer() { return mSDLRenderer; }
     SDL_Point GetWindowSize() { return mWindowSize; }

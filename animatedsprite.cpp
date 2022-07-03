@@ -39,20 +39,15 @@ void AnimatedSprite::SetAnimation(const std::string* name, bool resetTimer) {
 }
 
 void AnimatedSprite::AddAnimation(const std::string* name, const std::vector<SDL_Rect*>* frames) {
-    SDL_Renderer* rend = mOwner->GetGame()->GetRenderer()->GetSDLRenderer();
     std::vector<SDL_Texture*> animation;
+    Renderer* renderer = mOwner->GetGame()->GetRenderer();
 
     // render frames to textures and add to mAnims
     for (SDL_Rect* sourceRect : *frames) {
         // create texture
-        SDL_Texture* frame = SDL_CreateTexture(rend, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, 16, 16);
-        SDL_SetRenderTarget(rend, frame);
-        SDL_RenderCopy(rend, mSpritesheet, sourceRect, nullptr);
+        SDL_Texture* frame = renderer->CreateTextureFromTexture(mSpritesheet, 16, 16, sourceRect);
         animation.push_back(frame);
-
-        mOwner->GetGame()->CacheTexture("tileset-texture", frame);
     }
 	mAnims.emplace(*name, animation);
-    SDL_SetRenderTarget(rend, nullptr);
 }
 

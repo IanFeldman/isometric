@@ -1,6 +1,9 @@
 #include "fastnoiselite.h"
 #include "game.h"
+#include "math.h"
+#include "tree.h"
 #include "world.h"
+#include <algorithm>
 #include <SDL2/SDL.h>
 
 World::World(Game* game)
@@ -60,9 +63,30 @@ void World::Generate(int playerX, int playerY) {
             }
             // grass
             else {
-                int rand = (int)(height * 1000) % 5;
+                int rand = (int)(height * 1000) % 8;
                 tilesetX = rand;
                 tilesetY = 0;
+
+                // tree
+                if ((int)(height * 1000) % 64 == 0) {
+                    // check if there is already a tree there
+                    Vector2 pos = Vector2(sampleX, sampleY);
+                    bool treePresent = false;
+                    for (Vector2 p : mTreePositions) {
+                        if (p.x == pos.x && p.y == pos.y) {
+                            treePresent = true;
+                            break;
+                        }
+                    }
+                    if (!treePresent) {
+                        // create tree
+                        Tree* tree = new Tree(mGame);
+                        mGame->AddActor(tree);
+                        tree->SetPosition(pos);
+                        tree->SetScale(4.0f);
+                        mTreePositions.push_back(pos);
+                    }
+                }
             }
 
             // render to background texture
