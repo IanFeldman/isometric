@@ -28,6 +28,8 @@ bool Game::Initialize() {
 }
 
 void Game::LoadData() {
+    mTileset = mRenderer->LoadImage("assets/tileset.png");
+
     mPlayer = new Player(this);
     mPlayer->SetPosition(Vector2(400, 0));
     mPlayer->SetScale(4.0f);
@@ -116,6 +118,7 @@ void Game::End() {
 
 void Game::UnloadData() {
     // destructor kills window and renderer
+    // deletes textures as well
     delete mRenderer;
 
     // delete all actors
@@ -125,11 +128,7 @@ void Game::UnloadData() {
     }
 
     // destroy textures
-    for (auto it = mTextureCache.begin(); it != mTextureCache.end(); it++) {
-        SDL_DestroyTexture(it->second);
-    }
-
-    mTextureCache.clear();
+    SDL_DestroyTexture(mTileset);
 }
 
 // add/remove actors
@@ -163,22 +162,6 @@ void Game::RemoveSprite(SpriteComponent* sprite) {
 
     if (it != mSprites.end()) {
         mSprites.erase(it);
-    }
-}
-
-// load texture
-SDL_Texture* Game::GetTexture(const char* fileName) {
-    std::unordered_map<std::string, SDL_Texture*>::const_iterator got = mTextureCache.find(fileName);
-    // get it from map
-    if (got != mTextureCache.end())
-        return got->second;
-    // or load it in
-    else {
-        SDL_Surface* tempSurface = IMG_Load(fileName);
-        SDL_Texture* tempTexture = SDL_CreateTextureFromSurface(mRenderer->GetSDLRenderer(), tempSurface);
-        SDL_FreeSurface(tempSurface);
-        mTextureCache.emplace(fileName, tempTexture);
-        return tempTexture;
     }
 }
 

@@ -2,6 +2,7 @@
 #include "spritecomponent.h"
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
+#include <unordered_map>
 
 class Renderer {
 
@@ -13,13 +14,19 @@ public:
     void ClearScreen();
     void Present();
 
+    // creates texture out of image file
+    SDL_Texture* LoadImage(const char* fileName);
+    // fetches texture from tileset
+    SDL_Texture* GetTexture(SDL_Rect rect);
+    // creates texture from portion of another texture
+    SDL_Texture* CreateTextureFromTexture(SDL_Texture* sourceTex, int width, int height, SDL_Rect* sourceRect);
+
     void DrawSprite(SpriteComponent* sprite);
     void DrawWorld(SDL_Texture* texture, int worldX, int worldY, int width, int height);
 
     // CC DEBUG
     void DrawRectangle(SDL_Rect rect);
 
-    SDL_Texture* CreateTextureFromTexture(SDL_Texture* sourceTex, int width, int height, SDL_Rect* sourceRect);
 
     // getters/setters
     SDL_Renderer* GetSDLRenderer() { return mSDLRenderer; }
@@ -30,5 +37,7 @@ protected:
     SDL_Point mWindowSize;
     SDL_Window* mWindow;
     SDL_Renderer* mSDLRenderer;
+
+    std::unordered_map<std::string, SDL_Texture*> mTextureCache;
 };
 

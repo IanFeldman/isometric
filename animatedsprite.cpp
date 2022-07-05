@@ -45,7 +45,7 @@ void AnimatedSprite::AddAnimation(const std::string* name, const std::vector<SDL
     // render frames to textures and add to mAnims
     for (SDL_Rect* sourceRect : *frames) {
         // create texture
-        SDL_Texture* frame = renderer->CreateTextureFromTexture(mSpritesheet, 16, 16, sourceRect);
+        SDL_Texture* frame = renderer->GetTexture(*sourceRect);
         animation.push_back(frame);
     }
 	mAnims.emplace(*name, animation);

@@ -34,8 +34,7 @@ public:
     // getters/setters
     Renderer* GetRenderer() { return mRenderer; }
 
-    SDL_Texture* GetTexture(const char* fileName);
-    void CacheTexture(const char* fileName, SDL_Texture* texture) { mTextureCache.emplace(fileName, texture); }
+    SDL_Texture* GetTileset() { return mTileset; }
 
     Vector2 GetCamera() { return mCamera; }
     void SetCamera(Vector2 pos) { mCamera = pos; }
@@ -48,7 +47,8 @@ protected:
     class Renderer* mRenderer;
     std::vector<class Actor*> mActors;
     std::vector<class SpriteComponent*> mSprites;
-    std::unordered_map<std::string, SDL_Texture*> mTextureCache;
+
+    SDL_Texture* mTileset;
 
     // collision component debug
     std::vector<class CollisionComponent*> mColliders;

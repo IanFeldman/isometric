@@ -14,7 +14,7 @@ World::World(Game* game)
     ,mSpriteTileSize(16)    // size of each tile on spritesheet
     ,mWaterLine(1.0f)
 {
-    mTileset = mGame->GetTexture("assets/tileset.png");
+    mTileset = mGame->GetTileset();
     mNoise.SetNoiseType(FastNoiseLite::NoiseType_Perlin);
     mNoise.SetFrequency(mNoiseFreq);
 }

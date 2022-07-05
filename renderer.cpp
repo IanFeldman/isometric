@@ -12,10 +12,15 @@ Renderer::Renderer(Game* game)
 { }
 
 Renderer::~Renderer() {
-    //Destroy window
+    // Destroy window
     SDL_DestroyWindow(mWindow);
     // Destroy renderer
     SDL_DestroyRenderer(mSDLRenderer);
+    // Clear textures
+    for (auto it = mTextureCache.begin(); it != mTextureCache.end(); it++) {
+        SDL_DestroyTexture(it->second);
+    }
+    mTextureCache.clear();
 }
 
 bool Renderer::Create() {
@@ -51,6 +56,37 @@ void Renderer::ClearScreen() {
 
 void Renderer::Present() {
     SDL_RenderPresent(mSDLRenderer);
+}
+
+SDL_Texture* Renderer::LoadImage(const char* fileName) {
+    SDL_Surface* tempSurface = IMG_Load(fileName);
+    SDL_Texture* tempTexture = SDL_CreateTextureFromSurface(mSDLRenderer, tempSurface);
+    SDL_FreeSurface(tempSurface);
+    return tempTexture;
+}
+
+SDL_Texture* Renderer::GetTexture(SDL_Rect rect) {
+    // convert rect to string
+    std::string key = std::to_string(rect.x) + std::to_string(rect.y) + std::to_string(rect.w) + std::to_string(rect.h);
+    // look for texture
+    std::unordered_map<std::string, SDL_Texture*>::const_iterator got = mTextureCache.find(key);
+    // get it from map
+    if (got != mTextureCache.end()) {
+        return got->second;
+    }
+    else {
+        SDL_Texture* tex = CreateTextureFromTexture(mGame->GetTileset(), rect.w, rect.h, &rect);
+        mTextureCache.emplace(key, tex);
+        return tex;
+    }
+}
+
+SDL_Texture* Renderer::CreateTextureFromTexture(SDL_Texture* sourceTex, int width, int height, SDL_Rect* sourceRect) {
+    SDL_Texture* tex = SDL_CreateTexture(mSDLRenderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, width, height);
+    SDL_SetRenderTarget(mSDLRenderer, tex);
+    SDL_RenderCopy(mSDLRenderer, sourceTex, sourceRect, nullptr);
+    SDL_SetRenderTarget(mSDLRenderer, nullptr);
+    return tex;
 }
 
 void Renderer::DrawSprite(SpriteComponent* sprite) {
@@ -99,15 +135,4 @@ void Renderer::DrawRectangle(SDL_Rect rect) {
     SDL_SetRenderDrawColor(mSDLRenderer, 0, 255, 0, 255);
     SDL_RenderDrawRect(mSDLRenderer, &rect);
 }
-
-SDL_Texture* Renderer::CreateTextureFromTexture(SDL_Texture* sourceTex, int width, int height, SDL_Rect* sourceRect) {
-    SDL_Texture* tex = SDL_CreateTexture(mSDLRenderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, width, height);
-    SDL_SetRenderTarget(mSDLRenderer, tex);
-    SDL_RenderCopy(mSDLRenderer, sourceTex, sourceRect, nullptr);
-    SDL_SetRenderTarget(mSDLRenderer, nullptr);
-    mGame->CacheTexture("tileset-texture", tex);
-    return tex;
-}
-
-
 
