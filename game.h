@@ -27,15 +27,19 @@ public:
     void RemoveActor(class Actor* actor);
     // get list of actors
     std::vector<class Actor*> GetActors() { return mActors; }
-    
+
     // add sprite
     void AddSprite(class SpriteComponent* sprite);
     void RemoveSprite(class SpriteComponent* sprite);
+
+    // add ui to ui list
+    void AddUI(class UI* uiElement);
+    // remove ui from ui list
+    void RemoveUI(class UI* uiElement);
+
     // getters/setters
     Renderer* GetRenderer() { return mRenderer; }
-
     SDL_Texture* GetTileset() { return mTileset; }
-
     Vector2 GetCamera() { return mCamera; }
     void SetCamera(Vector2 pos) { mCamera = pos; }
 
@@ -45,7 +49,9 @@ protected:
     bool mRunning;
     int mPrevTime;
     class Renderer* mRenderer;
+
     std::vector<class Actor*> mActors;
+    std::vector<class UI*> mUIs;
     std::vector<class SpriteComponent*> mSprites;
 
     SDL_Texture* mTileset;
@@ -57,4 +63,6 @@ protected:
     class World* mWorld;
 
     Vector2 mCamera;
+
+    UI* mHealthUI[3];
 };

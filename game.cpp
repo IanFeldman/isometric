@@ -4,6 +4,7 @@
 #include "player.h"
 #include "renderer.h"
 #include "spritecomponent.h"
+#include "ui.h"
 #include "world.h"
 #include <algorithm>
 #include <SDL2/SDL.h>
@@ -35,6 +36,17 @@ void Game::LoadData() {
     mPlayer->SetScale(4.0f);
 
     mWorld = new World(this);
+
+    // UI
+    mHealthUI[0] = new UI(this);
+    mHealthUI[0]->SetTexture(mRenderer->GetTexture({0*16, 15*16, 16, 16}));
+    mHealthUI[0]->SetRect({704, 900, 64, 64});
+    mHealthUI[1] = new UI(this);
+    mHealthUI[1]->SetTexture(mRenderer->GetTexture({0*16, 15*16, 16, 16}));
+    mHealthUI[1]->SetRect({800, 900, 64, 64});
+    mHealthUI[2] = new UI(this);
+    mHealthUI[2]->SetTexture(mRenderer->GetTexture({1*16, 15*16, 16, 16}));
+    mHealthUI[2]->SetRect({896, 900, 64, 64});
 }
 
 void Game::RunLoop() {
@@ -92,20 +104,29 @@ void Game::GenerateOutput() {
     // generates and renders terrain
     mWorld->Generate((int)mPlayer->GetPosition().x, (int)mPlayer->GetPosition().y);
 
-    // loop over sprites and draw them
+    // draw sprites
     for (SpriteComponent* sprite : mSprites) {
         if (sprite->IsVisible()) {
             mRenderer->DrawSprite(sprite);
         }
     }
 
+    // draw ui
+    for (UI* ui : mUIs) {
+        if (ui->IsVisible()) {
+            mRenderer->DrawUI(ui);
+        }
+    }
+
     // CC DEBUG
+    /*
     for (Actor* a : mActors) {
         CollisionComponent* cc = a->GetComponent<CollisionComponent>();
         if (cc != nullptr) {
             cc->Debug();
         }
     }
+    */
 
     // render present
     mRenderer->Present();
@@ -162,6 +183,22 @@ void Game::RemoveSprite(SpriteComponent* sprite) {
 
     if (it != mSprites.end()) {
         mSprites.erase(it);
+    }
+}
+
+// add/remove UI
+void Game::AddUI(UI* uiElement) {
+    mUIs.push_back(uiElement);
+}
+
+void Game::RemoveUI(UI* uiElement) {
+    // create iterator
+    std::vector<UI*>::iterator it;
+    // find ui
+    it = std::find(mUIs.begin(), mUIs.end(), uiElement);
+    // remove it from actor vector
+    if (it != mUIs.end()) {
+        mUIs.erase(it);
     }
 }
 

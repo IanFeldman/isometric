@@ -2,6 +2,7 @@
 #include "game.h"
 #include "renderer.h"
 #include "spritecomponent.h"
+#include "UI.h"
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 
@@ -86,6 +87,7 @@ SDL_Texture* Renderer::CreateTextureFromTexture(SDL_Texture* sourceTex, int widt
     SDL_SetRenderTarget(mSDLRenderer, tex);
     SDL_RenderCopy(mSDLRenderer, sourceTex, sourceRect, nullptr);
     SDL_SetRenderTarget(mSDLRenderer, nullptr);
+    SDL_SetTextureBlendMode(tex, SDL_BLENDMODE_BLEND);
     return tex;
 }
 
@@ -112,8 +114,12 @@ void Renderer::DrawSprite(SpriteComponent* sprite) {
     r.x = static_cast<int>(ownerPosX - r.w / 2);
     r.y = static_cast<int>(ownerPosY - r.h / 2);
 
-    SDL_SetTextureBlendMode(sprite->GetTexture(), SDL_BLENDMODE_BLEND);
     SDL_RenderCopy(mSDLRenderer, sprite->GetTexture(), nullptr, &r);
+}
+
+void Renderer::DrawUI(UI* uiElement) {
+    SDL_Rect r = uiElement->GetRect();
+    SDL_RenderCopy(mSDLRenderer, uiElement->GetTexture(), nullptr, &r);  
 }
 
 void Renderer::DrawWorld(SDL_Texture* texture, int worldX, int worldY, int width, int height) {

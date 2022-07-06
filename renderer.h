@@ -1,5 +1,6 @@
 #pragma once
 #include "spritecomponent.h"
+#include "ui.h"
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <unordered_map>
@@ -23,6 +24,7 @@ public:
 
     void DrawSprite(SpriteComponent* sprite);
     void DrawWorld(SDL_Texture* texture, int worldX, int worldY, int width, int height);
+    void DrawUI(UI* ui);
 
     // CC DEBUG
     void DrawRectangle(SDL_Rect rect);
