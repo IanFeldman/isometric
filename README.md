@@ -1,6 +1,6 @@
 # isometric
 
-![Video demonstration](https://imgur.com/x93o3Bu.gif)
+![Video demonstration](https://github.com/IanFeldman/isometric/blob/main/screenshots/demo.gif)
 
 Explore an infinite procedural world in this SDL2-powered game demo!
 
