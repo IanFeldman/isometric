@@ -7,7 +7,7 @@
 class AnimatedSprite : public SpriteComponent
 {
 public:
-    AnimatedSprite(class Actor*, SDL_Texture* spritesheet, int drawOrder = 100);
+    AnimatedSprite(class Actor*, SDL_Texture* spritesheet);
 
     // overriding component update
     void Update(float deltaTime) override;

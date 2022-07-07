@@ -3,10 +3,9 @@
 #include "spritecomponent.h"
 #include <SDL2/SDL.h>
 
-SpriteComponent::SpriteComponent(Actor* owner, int drawOrder)
+SpriteComponent::SpriteComponent(Actor* owner)
 	:Component(owner)
 	,mTexture(nullptr)
-	,mDrawOrder(drawOrder)
 	,mTexWidth(0)
 	,mTexHeight(0)
 {

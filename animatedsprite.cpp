@@ -3,8 +3,8 @@
 #include "game.h"
 #include <SDL2/SDL.h>
 
-AnimatedSprite::AnimatedSprite(Actor* owner, SDL_Texture* spritesheet, int drawOrder)
-	:SpriteComponent(owner, drawOrder)
+AnimatedSprite::AnimatedSprite(Actor* owner, SDL_Texture* spritesheet)
+	:SpriteComponent(owner)
     ,mSpritesheet(spritesheet)
 {
 }

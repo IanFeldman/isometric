@@ -6,10 +6,9 @@
 #include <SDL2/SDL.h>
 #include <iostream>
 
-CollisionComponent::CollisionComponent(Actor* owner, int width, int height)
+CollisionComponent::CollisionComponent(Actor* owner, SDL_Rect bounds)
     :Component(owner)
-    ,mColliderWidth(width)
-    ,mColliderHeight(height)
+    ,mBounds(bounds)
 {
 }
 
@@ -35,21 +34,42 @@ Vector2 CollisionComponent::GetMinOffset() {
 
 Vector2 CollisionComponent::Collide(CollisionComponent* otherCC) {
     // check collision
-    int thisWidth = mColliderWidth * mOwner->GetScale();
-    int thisHeight = mColliderHeight * mOwner->GetScale();
-    int thisX = mOwner->GetPosition().x;
-    int thisY = mOwner->GetPosition().y;
+    // this
+    int thisWidth = mBounds.w * mOwner->GetScale();
+    int thisHeight = mBounds.h * mOwner->GetScale();
+    // top left and right
+    int thisX = mBounds.x * mOwner->GetScale() + mOwner->GetPosition().x;
+    int thisY = mBounds.y * mOwner->GetScale() + mOwner->GetPosition().y;
 
-    int otherWidth = otherCC->GetWidth() * otherCC->GetOwner()->GetScale();
-    int otherHeight = otherCC->GetHeight() * otherCC->GetOwner()->GetScale();
-    int otherX = otherCC->GetOwner()->GetPosition().x;
-    int otherY = otherCC->GetOwner()->GetPosition().y;
+    // other
+    SDL_Rect otherBounds = otherCC->GetBounds();
+    float otherScale = otherCC->GetOwner()->GetScale();
+    int otherWidth = otherBounds.w * otherScale;
+    int otherHeight = otherBounds.h * otherScale;
+    // top left and right
+    int otherX = otherBounds.x * otherScale + otherCC->GetOwner()->GetPosition().x; 
+    int otherY = otherBounds.y * otherScale + otherCC->GetOwner()->GetPosition().y; 
     
+    // actual distance
     int deltaX = thisX - otherX;
-    int expectedDistX = thisWidth / 2 + otherWidth / 2;
+    // min distance it should be
+    int expectedDistX;
+    if (deltaX >= 0) {
+        expectedDistX = otherWidth;
+    }
+    else {
+        expectedDistX = thisWidth;
+    }
 
+    // same for y
     int deltaY = thisY - otherY;
-    int expectedDistY = thisHeight / 2 + otherHeight / 2;
+    int expectedDistY;
+    if (deltaY >= 0) {
+        expectedDistY = otherHeight;
+    }
+    else {
+        expectedDistY = thisHeight;
+    }
 
     bool collision = std::abs(deltaX) <= expectedDistX && std::abs(deltaY) <= expectedDistY;
 
@@ -74,11 +94,12 @@ Vector2 CollisionComponent::Collide(CollisionComponent* otherCC) {
 
 void CollisionComponent::Debug() {
     // debug draw our own collider
+    float scale = mOwner->GetScale();
     SDL_Rect r;
-    r.w = mColliderWidth * mOwner->GetScale();
-    r.h = mColliderHeight * mOwner->GetScale();
-    r.x = mOwner->GetPosition().x - r.w / 2;
-    r.y = mOwner->GetPosition().y - r.h / 2;
+    r.w = mBounds.w * scale;
+    r.h = mBounds.h * scale;
+    r.x = mBounds.x * scale + mOwner->GetPosition().x;
+    r.y = mBounds.y * scale + mOwner->GetPosition().y;
     mOwner->GetGame()->GetRenderer()->DrawRectangle(r);
 }
 

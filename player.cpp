@@ -11,9 +11,9 @@ Player::Player(Game* game)
     ,mMoveSpeed(300.0f)
 {
     // create collision component
-    mCC = new CollisionComponent(this, 12, 16);
+    mCC = new CollisionComponent(this, { -6, 0, 12, 8 });
 
-    mASprite = new AnimatedSprite(this, mGame->GetTileset(), 100);
+    mASprite = new AnimatedSprite(this, mGame->GetTileset());
     mASprite->SetFPS(10.0f);
     LoadAnimations();
     mDir = Dir::Down;

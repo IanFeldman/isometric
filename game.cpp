@@ -104,6 +104,11 @@ void Game::GenerateOutput() {
     // generates and renders terrain
     mWorld->Generate((int)mPlayer->GetPosition().x, (int)mPlayer->GetPosition().y);
 
+    // sort sprites
+    std::sort(mSprites.begin(), mSprites.end(),
+        [](SpriteComponent* a, SpriteComponent* b) {
+            return a->GetOwner()->GetPosition().y < b->GetOwner()->GetPosition().y;
+        });
     // draw sprites
     for (SpriteComponent* sprite : mSprites) {
         if (sprite->IsVisible()) {
@@ -173,7 +178,7 @@ void Game::AddSprite(SpriteComponent* sprite) {
     mSprites.push_back(sprite);
     std::sort(mSprites.begin(), mSprites.end(),
         [](SpriteComponent* a, SpriteComponent* b) {
-            return a->GetDrawOrder() < b->GetDrawOrder();
+            return a->GetOwner()->GetPosition().y < b->GetOwner()->GetPosition().y;
         });
 }
 

@@ -1,21 +1,21 @@
 #pragma once
 #include "component.h"
 #include "math.h"
+#include <SDL2/SDL.h>
 
 class CollisionComponent : public Component
 {
 public:
-    CollisionComponent(class Actor* owner, int width, int height);
+    CollisionComponent(class Actor* owner, SDL_Rect bounds);
 
     Vector2 GetMinOffset();
     Vector2 Collide(class CollisionComponent* otherCC);
-    int GetWidth() { return mColliderWidth; }
-    int GetHeight() { return mColliderHeight; }
+
+    SDL_Rect GetBounds() { return mBounds; }
 
     void Debug();
 
 protected:
-    int mColliderWidth;
-    int mColliderHeight;
+    SDL_Rect mBounds;
 };
 
